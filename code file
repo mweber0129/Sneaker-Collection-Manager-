@@ -1,0 +1,189 @@
+#include <iostream>
+#include <string>
+#include <iomanip>
+#include <limits>
+using namespace std;
+
+enum SneakerBrand
+{
+    Nike,
+    Adidas,
+    Jordan,
+    NewBalance,
+    Puma
+};
+
+enum SneakerCondition
+{
+    New,
+    Excellent,
+    Good,
+    Fair,
+    Poor
+};
+
+struct Sneaker
+{
+    string model;
+    SneakerBrand brand;
+    double size;
+    SneakerCondition condition;
+    double purchasePrice;
+    double estimatedValue;
+};
+
+string brandToString(SneakerBrand brand)
+{
+    if (brand == Nike) return "Nike";
+    if (brand == Adidas) return "Adidas";
+    if (brand == Jordan) return "Jordan";
+    if (brand == NewBalance) return "New Balance";
+    if (brand == Puma) return "Puma";
+    return "Unknown";
+}
+
+string conditionToString(SneakerCondition condition)
+{
+    if (condition == New) return "New";
+    if (condition == Excellent) return "Excellent";
+    if (condition == Good) return "Good";
+    if (condition == Fair) return "Fair";
+    if (condition == Poor) return "Poor";
+    return "Unknown";
+}
+
+SneakerBrand getBrandInput()
+{
+    int choice;
+
+    cout << "Select a brand:" << endl;
+    cout << "1. Nike" << endl;
+    cout << "2. Adidas" << endl;
+    cout << "3. Jordan" << endl;
+    cout << "4. New Balance" << endl;
+    cout << "5. Puma" << endl;
+    cout << "Choice: ";
+    cin >> choice;
+
+    while (choice < 1 || choice > 5)
+    {
+        cout << "Enter a number 1-5: ";
+        cin >> choice;
+    }
+
+    if (choice == 1) return Nike;
+    if (choice == 2) return Adidas;
+    if (choice == 3) return Jordan;
+    if (choice == 4) return NewBalance;
+    return Puma;
+}
+
+SneakerCondition getConditionInput()
+{
+    int choice;
+
+    cout << "Select a condition:" << endl;
+    cout << "1. New" << endl;
+    cout << "2. Excellent" << endl;
+    cout << "3. Good" << endl;
+    cout << "4. Fair" << endl;
+    cout << "5. Poor" << endl;
+    cout << "Choice: ";
+    cin >> choice;
+
+    while (choice < 1 || choice > 5)
+    {
+        cout << "Enter a number 1-5: ";
+        cin >> choice;
+    }
+
+    if (choice == 1) return New;
+    if (choice == 2) return Excellent;
+    if (choice == 3) return Good;
+    if (choice == 4) return Fair;
+    return Poor;
+}
+
+Sneaker getSneakerInput(int num)
+{
+    Sneaker s;
+
+    cout << "\nSneaker #" << num << endl;
+
+    cout << "Model Name: ";
+    getline(cin, s.model);
+
+    s.brand = getBrandInput();
+
+    cout << "Size: ";
+    cin >> s.size;
+
+    s.condition = getConditionInput();
+
+    cout << "Purchase Price: $";
+    cin >> s.purchasePrice;
+
+    cout << "Estimated Current Value: $";
+    cin >> s.estimatedValue;
+
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    return s;
+}
+
+void displaySneaker(const Sneaker& s, int num)
+{
+    cout << "\nSneaker #" << num << endl;
+    cout << "Model: " << s.model << endl;
+    cout << "Brand: " << brandToString(s.brand) << endl;
+    cout << "Size: " << s.size << endl;
+    cout << "Condition: " << conditionToString(s.condition) << endl;
+    cout << fixed << setprecision(2);
+    cout << "Purchase Price: $" << s.purchasePrice << endl;
+    cout << "Estimated Value: $" << s.estimatedValue << endl;
+}
+
+int main()
+{
+    Sneaker sneaker1;
+    Sneaker sneaker2;
+    Sneaker sneaker3;
+
+    cout << "================================" << endl;
+    cout << "   SNEAKER COLLECTION MANAGER" << endl;
+    cout << "================================" << endl;
+
+    sneaker1 = getSneakerInput(1);
+    sneaker2 = getSneakerInput(2);
+    sneaker3 = getSneakerInput(3);
+
+    cout << "\n================================" << endl;
+    cout << "      SNEAKER COLLECTION" << endl;
+    cout << "================================" << endl;
+
+    displaySneaker(sneaker1, 1);
+    displaySneaker(sneaker2, 2);
+    displaySneaker(sneaker3, 3);
+
+    double totalPaid = sneaker1.purchasePrice + sneaker2.purchasePrice + sneaker3.purchasePrice;
+    double totalValue = sneaker1.estimatedValue + sneaker2.estimatedValue + sneaker3.estimatedValue;
+    double gainLoss = totalValue - totalPaid;
+
+    cout << "\n================================" << endl;
+    cout << "       COLLECTION SUMMARY" << endl;
+    cout << "================================" << endl;
+    cout << fixed << setprecision(2);
+    cout << "Total Paid:       $" << totalPaid << endl;
+    cout << "Current Value:    $" << totalValue << endl;
+    cout << "Gain/Loss:        $" << gainLoss << endl;
+
+    cout << endl;
+    if (gainLoss > 0)
+        cout << "Your collection has increased in value!" << endl;
+    else if (gainLoss < 0)
+        cout << "Your collection has decreased in value." << endl;
+    else
+        cout << "Your collection value has stayed the same." << endl;
+
+    return 0;
+}
